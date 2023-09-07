@@ -1,7 +1,7 @@
 "use client"; // because of useForm
 
 import React, { useState } from "react";
-import { MessageSquare } from "lucide-react";
+import { Music } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,15 +16,10 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
-import { cn } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
-import { BotAvatar } from "@/components/bot-avatar";
 
-const ConversationPage = () => {
+const MusicPage = () => {
   const router = useRouter();
-  const [messages, setMessages] = useState<
-    OpenAI.Chat.Completions.ChatCompletionMessageParam[]
-  >([]);
+  const [music, setMusic] = useState<string>();
 
   // the resolver links the form schema with the useForm hook
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,16 +32,11 @@ const ConversationPage = () => {
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const userMessage: OpenAI.Chat.Completions.ChatCompletionMessageParam = {
-        role: "user",
-        content: values.prompt,
-      };
-
-      const newMessages = [...messages, userMessage];
-      const response = await axios.post("/api/conversation", {
-        messages: newMessages,
+      const response = await axios.post("/api/music", {
+        values,
       });
-      setMessages((current) => [...current, userMessage, response.data]);
+      setMusic(response.data.audio);
+
       form.reset();
     } catch (err) {
       //TODO: Open Pro Modal
@@ -60,11 +50,11 @@ const ConversationPage = () => {
     <div>
       {/* Heading */}
       <Heading
-        title="Conversation"
-        description="Our most advanced conversation model"
-        icon={MessageSquare}
-        iconColor="text-violet-500"
-        bgColor="bg-violet-500/10"
+        title="Music Generation"
+        description="Turn your prompt into music"
+        icon={Music}
+        iconColor="text-emerald-500"
+        bgColor="bg-emerald-500/10"
       />
 
       {/* Form */}
@@ -82,7 +72,7 @@ const ConversationPage = () => {
                     <Input
                       className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                       disabled={isLoading}
-                      placeholder="What is the temperature of the Sun"
+                      placeholder="Piano solo"
                       {...field} // equivalent to adding onChange, onBlur,value etc.
                     />
                   </FormControl>
@@ -107,25 +97,10 @@ const ConversationPage = () => {
             )}
 
             {/* No conversation */}
-            {messages.length === 0 && !isLoading && (
-              <Empty label="No conversation started" />
-            )}
+            {!music && !isLoading && <Empty label="No music generated." />}
 
-            {/* Conversation started*/}
-            {messages.map((message, idx) => (
-              <div
-                key={idx}
-                className={cn(
-                  "p-8 w-full flex items-start gap-x-8 rounded-lg",
-                  message.role === "user"
-                    ? "bg-white border border-black/10"
-                    : "bg-muted"
-                )}
-              >
-                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                <p className="text-sm">{message.content}</p>
-              </div>
-            ))}
+            {/* Music Generated*/}
+            <div></div>
           </div>
         </div>
       </div>
@@ -133,4 +108,4 @@ const ConversationPage = () => {
   );
 };
 
-export default ConversationPage;
+export default MusicPage;
