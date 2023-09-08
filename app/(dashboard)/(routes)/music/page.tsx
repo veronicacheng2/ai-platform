@@ -32,7 +32,7 @@ const MusicPage = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post("/api/music", {
-        prompt: values,
+        values,
       });
       setMusic(response.data.audio);
 
@@ -71,7 +71,7 @@ const MusicPage = () => {
                     <Input
                       className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                       disabled={isLoading}
-                      placeholder="Piano solo"
+                      placeholder="Guitar sound"
                       {...field} // equivalent to adding onChange, onBlur,value etc.
                     />
                   </FormControl>
@@ -95,7 +95,7 @@ const MusicPage = () => {
               </div>
             )}
 
-            {/* No conversation */}
+            {/* No prompt */}
             {!music && !isLoading && <Empty label="No music generated." />}
 
             {/* Music Generated*/}

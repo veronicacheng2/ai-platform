@@ -1,7 +1,7 @@
 "use client"; // because of useForm
 
 import React, { useState } from "react";
-import { Music } from "lucide-react";
+import { VideoIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,9 +16,9 @@ import { useRouter } from "next/navigation";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 
-const MusicPage = () => {
+const VideoPage = () => {
   const router = useRouter();
-  const [music, setMusic] = useState<string>();
+  const [video, setVideo] = useState<string>();
 
   // the resolver links the form schema with the useForm hook
   const form = useForm<z.infer<typeof formSchema>>({
@@ -31,10 +31,10 @@ const MusicPage = () => {
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/music", {
-        prompt: values,
+      const response = await axios.post("/api/video", {
+        values,
       });
-      setMusic(response.data.audio);
+      setVideo(response.data[0]);
 
       form.reset();
     } catch (err) {
@@ -49,11 +49,11 @@ const MusicPage = () => {
     <div>
       {/* Heading */}
       <Heading
-        title="Music Generation"
-        description="Turn your prompt into music"
-        icon={Music}
-        iconColor="text-emerald-500"
-        bgColor="bg-emerald-500/10"
+        title="Video Generation"
+        description="Turn your prompt into video"
+        icon={VideoIcon}
+        iconColor="text-orange-700"
+        bgColor="bg-orange-700/10"
       />
 
       {/* Form */}
@@ -71,7 +71,7 @@ const MusicPage = () => {
                     <Input
                       className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                       disabled={isLoading}
-                      placeholder="Piano solo"
+                      placeholder="Dog running"
                       {...field} // equivalent to adding onChange, onBlur,value etc.
                     />
                   </FormControl>
@@ -95,14 +95,17 @@ const MusicPage = () => {
               </div>
             )}
 
-            {/* No conversation */}
-            {!music && !isLoading && <Empty label="No music generated." />}
+            {/* No Prompt */}
+            {!video && !isLoading && <Empty label="No video generated." />}
 
-            {/* Music Generated*/}
-            {music && (
-              <audio controls className="w-full mt-8">
-                <source src={music} />
-              </audio>
+            {/* Video Generated*/}
+            {video && (
+              <video
+                className="w-full aspect-video mt-8 rounded-lg bg-black"
+                controls
+              >
+                <source src={video} />
+              </video>
             )}
           </div>
         </div>
@@ -111,4 +114,4 @@ const MusicPage = () => {
   );
 };
 
-export default MusicPage;
+export default VideoPage;
