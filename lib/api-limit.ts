@@ -52,3 +52,21 @@ export const checkApiLimit = async () => {
     }
 
 }
+
+// for checking how many free use remaining
+export const getApiLimitCount = async () => {
+    const {userId} = auth()
+
+    if(!userId) return 0
+
+    const userApiLimit = await prismadb.userApiLimit.findUnique({
+        where:{
+            userId
+        }
+    })
+
+    // the user hasn't used any free generation before
+    if(!userApiLimit) return 0
+
+    return userApiLimit.count;
+}
