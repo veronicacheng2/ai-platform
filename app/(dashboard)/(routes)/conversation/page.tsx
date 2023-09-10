@@ -52,7 +52,7 @@ const ConversationPage = () => {
       //TODO: Open Pro Modal
       console.log(err);
     } finally {
-      router.refresh();
+      router.refresh(); //rehydrate all server components (all server components are going to get refreshed)
     }
   };
 
