@@ -5,7 +5,7 @@ import { Code } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import OpenAI from "openai";
 import ReactMarkdown from "react-markdown";
 
@@ -20,8 +20,10 @@ import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 const CodePage = () => {
+  const proModal = useProModal();
   const router = useRouter();
   const [messages, setMessages] = useState<
     OpenAI.Chat.Completions.ChatCompletionMessageParam[]
@@ -50,7 +52,9 @@ const CodePage = () => {
       setMessages((current) => [...current, userMessage, response.data]);
       form.reset();
     } catch (err) {
-      //TODO: Open Pro Modal
+      if (err instanceof AxiosError && err?.response?.status === 403) {
+        proModal.onOpen();
+      }
       console.log(err);
     } finally {
       router.refresh();

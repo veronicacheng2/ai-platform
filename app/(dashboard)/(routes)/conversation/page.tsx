@@ -5,7 +5,7 @@ import { MessageSquare } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import OpenAI from "openai";
 
 import Heading from "@/components/heading";
@@ -19,12 +19,14 @@ import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 const ConversationPage = () => {
   const router = useRouter();
   const [messages, setMessages] = useState<
     OpenAI.Chat.Completions.ChatCompletionMessageParam[]
   >([]);
+  const proModal = useProModal();
 
   // the resolver links the form schema with the useForm hook
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,9 +50,10 @@ const ConversationPage = () => {
       });
       setMessages((current) => [...current, userMessage, response.data]);
       form.reset();
-    } catch (err) {
-      //TODO: Open Pro Modal
-      console.log(err);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError && err?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh(); //rehydrate all server components (all server components are going to get refreshed)
     }

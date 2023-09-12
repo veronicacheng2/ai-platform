@@ -5,7 +5,7 @@ import { VideoIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import Heading from "@/components/heading";
 import { formSchema } from "./constants";
@@ -15,8 +15,10 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 const VideoPage = () => {
+  const proModal = useProModal();
   const router = useRouter();
   const [video, setVideo] = useState<string>();
 
@@ -38,8 +40,9 @@ const VideoPage = () => {
 
       form.reset();
     } catch (err) {
-      //TODO: Open Pro Modal
-      console.log(err);
+      if (err instanceof AxiosError && err?.response?.status === 403) {
+        proModal.onOpen();
+      }
     } finally {
       router.refresh();
     }
