@@ -20,6 +20,7 @@ model UserApiLimit {
 
 // everytime prisma schema is updated use `npx prisam db push` and `npx prisma generate`<-to add the model to node modules
 // npx prisma studio to look at the data
+// npx prisma migrate reset (for clearing the database) -> npx prisma generate -> npx prisma db push
 
 model UserSubscription {
   id                     String    @id @default(cuid())

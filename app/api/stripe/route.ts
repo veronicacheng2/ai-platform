@@ -22,7 +22,7 @@ export async function GET() {
             }
         });
 
-        // user has stripe subscription
+        // CASE: user has stripe subscription (to billing)
         if(userSubscription && userSubscription.stripeCustomerId){
             // redirect user to the billing page 
             const stripeSession = await stripe.billingPortal.sessions.create({
@@ -33,7 +33,7 @@ export async function GET() {
             return new NextResponse(JSON.stringify({url:stripeSession.url}))
         }
 
-        // user has no stripe subscription
+        // CASE: user has no stripe subscription (to checkout)
         const stripeSession = await stripe.checkout.sessions.create({
             success_url:settingsUrl,
             cancel_url:settingsUrl,

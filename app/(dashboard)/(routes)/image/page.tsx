@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 import { useProModal } from "@/hooks/use-pro-modal";
+import { toast } from "react-hot-toast";
 
 const ImagePage = () => {
   const proModal = useProModal();
@@ -53,6 +54,8 @@ const ImagePage = () => {
     } catch (err) {
       if (err instanceof AxiosError && err?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error("Something went wrong...");
       }
     } finally {
       router.refresh();

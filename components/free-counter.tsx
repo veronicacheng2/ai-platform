@@ -9,9 +9,13 @@ import { useProModal } from "@/hooks/use-pro-modal";
 
 type FreeCounterProps = {
   apiLimitCount: number;
+  isPro: boolean;
 };
 
-const FreeCounter = ({ apiLimitCount = 0 }: FreeCounterProps) => {
+const FreeCounter = ({
+  apiLimitCount = 0,
+  isPro = false,
+}: FreeCounterProps) => {
   const proModal = useProModal();
 
   //prevent hydration error
@@ -23,6 +27,7 @@ const FreeCounter = ({ apiLimitCount = 0 }: FreeCounterProps) => {
   // ensure it will not be rendered on server
   if (!mounted) return null;
 
+  if (isPro) return null;
   return (
     <div className="px-3">
       <Card className="bg-white/10 border-0">

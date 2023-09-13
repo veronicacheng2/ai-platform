@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/user-avatar";
 import { BotAvatar } from "@/components/bot-avatar";
 import { useProModal } from "@/hooks/use-pro-modal";
+import { toast } from "react-hot-toast";
 
 const ConversationPage = () => {
   const router = useRouter();
@@ -53,6 +54,8 @@ const ConversationPage = () => {
     } catch (err: unknown) {
       if (err instanceof AxiosError && err?.response?.status === 403) {
         proModal.onOpen();
+      } else {
+        toast.error("Something went wrong...");
       }
     } finally {
       router.refresh(); //rehydrate all server components (all server components are going to get refreshed)

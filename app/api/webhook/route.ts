@@ -19,6 +19,8 @@ export async function POST(req:Request){
 
     const session = event.data.object as Stripe.Checkout.Session;
 
+
+    // first time, need to create a userSubscription entry in DB
     if (event.type === "checkout.session.completed") {
       const subscription = await stripe.subscriptions.retrieve(
         session.subscription as string
@@ -42,6 +44,7 @@ export async function POST(req:Request){
       })
     }
   
+    // have subscribed before
     if (event.type === "invoice.payment_succeeded") {
       const subscription = await stripe.subscriptions.retrieve(
         session.subscription as string
