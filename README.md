@@ -1,7 +1,9 @@
 # Wisdom AI Platform
-Welcome to Wisdom, a powerful tool that integrates the ChatGPT API and Replicate API. With this application, users can easily generate code, create videos, and compose music using natural language prompts. 
+
+Welcome to Wisdom, a powerful tool that integrates the ChatGPT API and Replicate API. With this application, users can easily generate code, create videos, and compose music using natural language prompts.
 
 ## Demo
+
 Check out the live demo of Wisdom at [Demo](https://wisdom-ai-platform.vercel.app/)
 
 ## Table of Contents
@@ -36,12 +38,12 @@ git clone https://github.com/veronicacheng2/ai-platform.git
 npm install
 ```
 
-
 3. You will need to create .env and fill in the following variables:
 
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,CLERK_SECRET_KEY,NEXT_PUBLIC_CLERK_SIGN_IN_URL,NEXT_PUBLIC_CLERK_SIGN_UP_URL,NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,OPENAI_API_KEY,REPLICATE_API_TOKEN,DATABASE_URL,STRIPE_API_KEY,STRIPE_WEBHOOK_SECRET,NEXT_PUBLIC_APP_URL
 
 4. Start the server:
+
 ```
 npm run dev
 ```
@@ -56,4 +58,24 @@ npm run dev
 
 ## Screenshots
 
+1. Home Page
 
+   ![](screenshots/HomePage.gif)
+
+2. Conversation with AI
+
+   ![](screenshots/Conversation.gif)
+
+3. Image Generation with AI
+
+   ![](screenshots/ImageGeneration.gif)
+
+4. Code Generation with AI
+
+   ![](screenshots/CodeGeneration.gif)
+
+<small>P.S Since I already used up all the free time limit for Replicate during testing, the actual image generation, video generation and music generation won't work.</small>
+
+5. Used Up All Free Limits
+
+   ![](screenshots/NoFreeLimit.gif)
